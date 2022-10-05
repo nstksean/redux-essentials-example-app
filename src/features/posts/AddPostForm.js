@@ -1,5 +1,4 @@
 
-import { nanoid } from '@reduxjs/toolkit'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { postAdded } from './postsSlice'
@@ -9,6 +8,9 @@ export const AddPostForm = () => {
     const [content, setContent] = useState('')
     const [userId, setUserId] = useState('')
 
+    const dispatch = useDispatch()
+    const users = useSelector((state) => state.users)
+
     // const onTitleChanged = (e) => {
     //    
     //     return setTitle(e.targert.value)
@@ -16,24 +18,13 @@ export const AddPostForm = () => {
     // const onContentChanged = (e) => {
     //     return setContent(e.targert.value)
     // }
-
     const onTitleChanged = e => setTitle(e.target.value)
     const onContentChanged = e => setContent(e.target.value)
     const onAuthorChanged = e => setUserId(e.target.value)
 
 
-
-    const dispatch = useDispatch()
-    const users = useSelector(state => state.user)
-
     const onSavePostClicked = () => {
         if (title && content) {
-            dispatch(postAdded({
-                id: nanoid(),
-                title,
-                content
-            })
-            )
             dispatch(postAdded(title, content, userId))
             setTitle('')
             setContent('')
@@ -56,6 +47,7 @@ export const AddPostForm = () => {
                     type="text"
                     id="postTitle"
                     name="postTitle"
+                    placeholder="What's on your mind?"
                     value={title}
                     onChange={onTitleChanged}
                 />
@@ -71,9 +63,9 @@ export const AddPostForm = () => {
                     value={content}
                     onChange={onContentChanged}
                 />
-                <button type="button"
-                    onClick={onSavePostClicked}
-                    disabled={!canSave}>Save Post</button>
+                <button type="button" onClick={onSavePostClicked} disabled={!canSave}>
+                    Save Post
+                </button>
             </form>
         </section>
     )
